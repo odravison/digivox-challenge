@@ -1,9 +1,9 @@
 package br.digivox.odravison.apiserver.shared.controller;
 
-import br.odravison.cdt.shared.domain.Domain;
-import br.odravison.cdt.shared.dto.DomainDTO;
-import br.odravison.cdt.shared.service.BaseDomainService;
-import br.odravison.cdt.shared.util.MapperDomainUtil;
+import br.digivox.odravison.apiserver.shared.domain.Domain;
+import br.digivox.odravison.apiserver.shared.dto.DomainDTO;
+import br.digivox.odravison.apiserver.shared.service.BaseDomainService;
+import br.digivox.odravison.apiserver.shared.util.MapperDomainUtil;
 import net.jodah.typetools.TypeResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
