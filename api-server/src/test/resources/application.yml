@@ -1,0 +1,24 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: api-server
+  jpa:
+    show-sql: false
+    hibernate:
+      #      Enabled only to generate table and database stuffs
+#      ddl-auto: update
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/api-server-test
+    username: digivox
+    password: challenge123
+
+  flyway:
+    out-of-order: true
+    baseline-on-migrate: true
+#    enabled: false
