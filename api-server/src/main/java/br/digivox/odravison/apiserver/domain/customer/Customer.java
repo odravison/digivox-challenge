@@ -1,7 +1,5 @@
 package br.digivox.odravison.apiserver.domain.customer;
 
-import br.digivox.odravison.apiserver.domain.rent.Rent;
-import br.digivox.odravison.apiserver.domain.rent.RentReserve;
 import br.digivox.odravison.apiserver.shared.domain.Domain;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
@@ -9,8 +7,6 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity(name = "customer")
 @Getter
@@ -24,7 +20,8 @@ import java.util.Set;
 public class Customer extends Domain<Long> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_seq")
+    @SequenceGenerator(name="customer_seq", sequenceName = "customer_seq")
     @Column(name = "id")
     private Long id;
 
@@ -49,7 +46,7 @@ public class Customer extends Domain<Long> {
      */
     @NonNull
     @NotNull
-    @Column(name = "cpf")
+    @Column(name = "cpf", unique = true)
     @EqualsAndHashCode.Include
     private String cpf;
 
@@ -58,21 +55,9 @@ public class Customer extends Domain<Long> {
      */
     @NonNull
     @NotNull
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     @EqualsAndHashCode.Include
     private String email;
-
-    /**
-     * Rents made for this user
-     */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer_id")
-    private Set<Rent> rents = new HashSet<>();
-
-    /**
-     * Reserves made for this user
-     */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer_id")
-    private Set<RentReserve> rentReserves = new HashSet<>();
 
     /**
      * If it is deleted.

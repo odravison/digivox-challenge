@@ -1,8 +1,10 @@
 package br.digivox.odravison.apiserver.domain.rent;
 
 import br.digivox.odravison.apiserver.domain.customer.Customer;
-import br.digivox.odravison.apiserver.domain.item.ItemRented;
+import br.digivox.odravison.apiserver.domain.item.Item;
+import br.digivox.odravison.apiserver.enums.RentSituation;
 import br.digivox.odravison.apiserver.shared.domain.Domain;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -10,6 +12,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,19 +28,40 @@ import java.util.Set;
 public class Rent extends Domain<Long> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rent_seq")
+    @SequenceGenerator(name="rent_seq", sequenceName = "rent_seq")
     @Column(name = "id")
     private Long id;
 
+    @NonNull
     @NotNull
+    @Column(name = "customer_id", nullable = false)
+    private Long customerOwnerId;
+
     @OneToOne(orphanRemoval = true, fetch=FetchType.EAGER)
-    @Column(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false, insertable = false, updatable = false)
     private Customer customerOwner;
 
     @NotNull
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "rent_id", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Min(value = 1, message = "A rent must have one item rented at least")
-    private Set<ItemRented> itemsRented = new HashSet<>();
+    @NonNull
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    private Set<Item> itemsUsed = new HashSet<>();
+
+    @NonNull
+    @NotNull
+    @Column(name = "rent_date")
+    private Date rentDate;
+
+    @NonNull
+    @NotNull
+    @Column(name = "return_date")
+    private Date returnDate;
+
+    @NotNull
+    @NonNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "rent_situation")
+    private RentSituation rentSituation;
 
     /**
      * If it is deleted.

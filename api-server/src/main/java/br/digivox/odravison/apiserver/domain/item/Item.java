@@ -2,6 +2,7 @@ package br.digivox.odravison.apiserver.domain.item;
 
 import br.digivox.odravison.apiserver.shared.domain.Domain;
 import lombok.*;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -21,10 +22,13 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = false)
 public class Item extends Domain<Long> {
 
+    public static final String IS_ITEM_AVAILABLE_CLAUSE = "NOT EXISTS(SELECT * FROM rent r WHERE r.rent_date = CURRENT_DATE AND r.deleted = false AND EXISTS(SELECT * FROM rent_items_used riu WHERE riu.items_used_id = id AND riu.rent_id = r.id) and deleted = false)";
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_seq")
+    @SequenceGenerator(name="item_seq", sequenceName = "item_seq")
     @Column(name = "id")
-    private Long id = null;
+    private Long id;
 
     /**
      * Item name
@@ -43,13 +47,14 @@ public class Item extends Domain<Long> {
     @DecimalMin(value = "0.01", message = "Item price must must be higher or equal to 0.01")
     private BigDecimal price;
 
-    /**
-     * Item quantity used to identify how much of this item could be rented
-     */
     @NonNull
     @NotNull
-    @Column(name = "quantity", nullable = false)
-    private Integer quantity;
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, targetEntity = ItemType.class)
+    private ItemType type;
+
+    @Column(name = "is_available", insertable = false, updatable = false)
+    @ColumnTransformer(read = Item.IS_ITEM_AVAILABLE_CLAUSE)
+    private Boolean availableToday;
 
     /**
      * If it is deleted.
