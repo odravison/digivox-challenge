@@ -44,7 +44,7 @@ public class Rent extends Domain<Long> {
 
     @NotNull
     @NonNull
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
     private Set<Item> itemsUsed = new HashSet<>();
 
     @NonNull

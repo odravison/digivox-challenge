@@ -50,7 +50,7 @@ public class CreateEntityUtil {
 
         String name = RandomString.make(10);
         BigDecimal value = BigDecimal.TEN;
-        ItemType type = this.itemTypeRepository.save(new ItemType(RandomString.make(10)));
+        ItemType type = this.createRandomItemType();
 
         return new Item(name, value, type);
     }
@@ -93,7 +93,11 @@ public class CreateEntityUtil {
         Customer customer = this.createRandomCustomer();
 
         Date rentDate = new Date();
-        Date returnDate = new Date();
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(rentDate);
+        c.add(Calendar.DATE, 1);
+        Date returnDate = c.getTime();
 
         Set<Item> items = new HashSet<>();
         items.add(this.createRandomItem());
@@ -107,6 +111,26 @@ public class CreateEntityUtil {
         rent.setItemsUsed(items);
 
         return rent;
+
+    }
+
+    public ItemType createItemType(String type) {
+
+        ItemType itemType = new ItemType(type);
+
+        return this.itemTypeRepository.save(itemType);
+    }
+
+    public ItemType createRandomItemType() {
+        ItemType itemType = generateItemTypeRandom();
+
+        return this.itemTypeRepository.save(itemType);
+    }
+
+    public ItemType generateItemTypeRandom() {
+        ItemType itemType = new ItemType(RandomString.make(10));
+
+        return itemType;
 
     }
 

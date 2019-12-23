@@ -1,9 +1,8 @@
 package br.digivox.odravison.apiserver.controller;
 
+import br.digivox.odravison.apiserver.domain.customer.Customer;
 import br.digivox.odravison.apiserver.domain.rent.Rent;
-import br.digivox.odravison.apiserver.dto.rent.RentDTO;
-import br.digivox.odravison.apiserver.repository.RentRepository;
-import br.digivox.odravison.apiserver.shared.util.MapperDomainUtil;
+import br.digivox.odravison.apiserver.repository.CustomerRepository;
 import br.digivox.odravison.apiserver.util.AbstractControllerTest;
 import net.bytebuddy.utility.RandomString;
 import org.junit.Test;
@@ -24,57 +23,57 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class RentControllerTest extends AbstractControllerTest {
+public class CustomerControllerTest extends AbstractControllerTest {
 
-    private final String BASE_ENDPOINT = "/rents%s";
+    private final String BASE_ENDPOINT = "/customers%s";
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private RentRepository rentRepository;
+    private CustomerRepository customerRepository;
 
     @Test
-    public void createRentAndReturn200() throws Exception {
-        Rent requestRent = this.createEntityUtil.generateRentRandom();
+    public void createCustomerAndReturn200() throws Exception {
+        Customer customerRequest = this.createEntityUtil.generateRandomCustomer();
 
         mockMvc.perform(post(String.format(BASE_ENDPOINT, ""))
-                .content(g.toJson(requestRent))
+                .content(g.toJson(customerRequest))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNotEmpty());
     }
 
     @Test
-    public void readRentAndReturn200() throws Exception {
-        Rent rentSaved = this.createEntityUtil.createRandomRent();
+    public void readCustomerAndReturn200() throws Exception {
+        Customer customerSaved = this.createEntityUtil.createRandomCustomer();
 
-        mockMvc.perform(get(String.format(BASE_ENDPOINT, "/" + rentSaved.getId())))
+        mockMvc.perform(get(String.format(BASE_ENDPOINT, "/" + customerSaved.getId())))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(rentSaved.getId().intValue())));
+                .andExpect(jsonPath("$.id", is(customerSaved.getId().intValue())));
 
     }
 
     @Test
-    public void updateRentAndReturn200() throws Exception {
-        Rent rentSaved = this.createEntityUtil.createRandomRent();
+    public void updateCustomerAndReturn200() throws Exception {
+        Customer customerSaved = this.createEntityUtil.createRandomCustomer();
 
-        rentSaved.getItemsUsed().removeIf(item -> item.getId().equals(3L));
+        customerSaved.setFirstName(RandomString.make(10));
 
-        mockMvc.perform(put(String.format(BASE_ENDPOINT, "/" + rentSaved.getId()))
-                .content(g.toJson(rentSaved))
+        mockMvc.perform(put(String.format(BASE_ENDPOINT, "/" + customerSaved.getId()))
+                .content(g.toJson(customerSaved))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(rentSaved.getId().intValue())))
-                .andExpect(jsonPath("$.itemsUsed.length()", is(rentSaved.getItemsUsed().size())));
+                .andExpect(jsonPath("$.id", is(customerSaved.getId().intValue())))
+                .andExpect(jsonPath("$.firstName", is(customerSaved.getFirstName())));
 
     }
 
     @Test
-    public void deleteRentAndReturn200() throws Exception {
-        Rent rentSaved = this.createEntityUtil.createRandomRent();
+    public void deleteCustomerAndReturn200() throws Exception {
+        Customer customerSaved = this.createEntityUtil.createRandomCustomer();
 
-        mockMvc.perform(delete(String.format(BASE_ENDPOINT, "/" + rentSaved.getId())))
+        mockMvc.perform(delete(String.format(BASE_ENDPOINT, "/" + customerSaved.getId())))
                 .andExpect(status().isOk());
     }
 

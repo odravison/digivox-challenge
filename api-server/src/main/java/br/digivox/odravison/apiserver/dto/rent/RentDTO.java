@@ -28,8 +28,12 @@ public class RentDTO extends DomainDTO {
 
     private RentSituation rentSituation;
 
+    @JsonFormat
+            (shape = JsonFormat.Shape.STRING, pattern = "MMM d, yyyy, hh:mm:ss a")
     private Date rentDate;
 
+    @JsonFormat
+            (shape = JsonFormat.Shape.STRING, pattern = "MMM d, yyyy, hh:mm:ss a")
     private Date returnDate;
 
 }
