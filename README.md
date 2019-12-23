@@ -10,6 +10,7 @@ API REST para gerenciamento de uma loja que aluga itens.
 - Cancelar reserva; __BACKEND + TESTES DE INTEGRAÇÃO (OK)__
 - Alugar item; __BACKEND + TESTES DE INTEGRAÇÃO (OK)__
 - Devolução de item; __BACKEND + TESTES DE INTEGRAÇÃO (OK)__
+
 Dashboard com informações sobre:
   - Itens a serem devolvidos no período semanal, com seus valores;
   - Itens alugados no período semanal, com seus valores;
