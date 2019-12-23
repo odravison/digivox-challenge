@@ -16,7 +16,7 @@ Clone o repositório no local de sua preferência
 O projeto utiliza PostgreSQL como banco de dados. Dentro do projeto existem dois contextos de aplicação: Development/Prod, Testes.
 Os testes rodam em um banco separado que utilizam do Flyway para fazer as migrações nos bancos.
 
-Para criar o banco de dados vamos utilizar um PostgreSQL container para termos mais praticidade. Para isso, prercisamos instalar uma instância do Postgresql, execute no terminal o script abaixo:
+Para criar o banco de dados vamos utilizar um PostgreSQL container para termos mais praticidade. Para isso, prercisamos rodar uma instância do Postgresql, execute no terminal o script abaixo:
 ```
 docker run -d --name api-server-db -e POSTGRES_USER=digivox -e POSTGRES_PASSWORD=challenge123 -p 5432:5432 postgres:10
 ```
@@ -44,3 +44,11 @@ Execute o script no terminal:
 ```
 
 Para cada teste, a aplicação limpa e migra os scripts SQL, criando assim as tabelas e suas dependências.
+
+NOTA: é de extrema importância que sua `JAVA_HOME` esteja devidamente configurada, apontando para a pasta do JAVA 11.
+Caso contrário, você pode rodar os testes em sua IDE de preferência.
+
+### Considerações finais
+Antes de mais nada, quero agradecer a oportunidade e o tempo na realização das etapas da entrevista.
+
+Por um contra-tempo a parte do front-end não pôde ser implementada, o tempo não foi sucifiente. Entretanto, é possível observar projetos de minha autoria usando ReactJS na minha conta do github.
