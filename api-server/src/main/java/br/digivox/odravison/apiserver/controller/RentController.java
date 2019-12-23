@@ -19,7 +19,7 @@ import javax.validation.Valid;
 @RequestMapping("rents")
 public class RentController extends BaseDomainController<Rent, Long, RentDTO> {
 
-    public final static String POST_RESERVE_ITEM = "/reserve-items";
+    public final static String POST_RESERVE_ITEMS = "/reserve-items";
     public final static String DELETE_CANCEL_RESERVE = "/reserve-items/{id}/cancel";
     public final static String POST_RENT_ITEMS = "/rent-items";
     public final static String POST_RENT_ITEMS_FROM_RESERVE = "/rent-items-by-reserve";
@@ -33,7 +33,7 @@ public class RentController extends BaseDomainController<Rent, Long, RentDTO> {
         return this.rentService;
     }
 
-    @PostMapping(RentController.POST_RESERVE_ITEM)
+    @PostMapping(RentController.POST_RESERVE_ITEMS)
     public ResponseEntity<RentDTO> reserveItems(@Valid @RequestBody ReserveItemsRequestDTO reserveRequest) throws BusinessException {
 
         RentDTO responseDTO = this.getService().reserveItems(reserveRequest);

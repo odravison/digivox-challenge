@@ -64,17 +64,19 @@ public class RentService extends BaseDomainService<Rent, Long> {
     }
 
     private void validateItemsToReserve(ReserveItemsRequestDTO reserveRequest) throws BusinessException {
-        this.validateItems(reserveRequest.getRentDate(), reserveRequest.getItemsIds());
+        this.validateItems(reserveRequest.getRentDate(), reserveRequest.getReturnDate(), reserveRequest.getItemsIds());
     }
 
     private void validateItemsToRent(RentItemsRequest rentRequest) throws BusinessException {
-        this.validateItems(rentRequest.getRentDate(), rentRequest.getItemsIds());
+        this.validateItems(rentRequest.getRentDate(), rentRequest.getReturnDate(), rentRequest.getItemsIds());
     }
 
-    private void validateItems(Date rentDate, List<Long> itemsIds) throws BusinessException {
+    private void validateItems(Date rentDate, Date returnDate, List<Long> itemsIds) throws BusinessException {
         Date today = new Date();
-        if (rentDate.before(today)) {
-            throw new BusinessException("Rent date must be after today's date");
+        if (returnDate.before(today)) {
+            throw new BusinessException("Return date must be after today's date");
+        } else if (rentDate.after(returnDate)) {
+            throw new BusinessException("Return date must be after rent's date");
         }
 
         Boolean itemsInUseOrReserved = this.rentRepository.itemsRentedOrReserved(rentDate,
